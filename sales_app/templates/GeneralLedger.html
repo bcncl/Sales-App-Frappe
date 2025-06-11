@@ -1,0 +1,89 @@
+<h2 class="text-center">Statement of Account</h2>
+<h4 class="text-center">
+	{% if filters.party_name %}
+		{{ filters.party_name }}
+	{% elif filters.party %}
+		{{ filters.party }}
+	{% elif filters.account %}
+		{{ filters.account }}
+	{% endif %}
+</h4>
+
+<h6 class="text-center">
+	{% if filters.tax_id %}
+		{{ ("Tax Id: ") }} {{ filters.tax_id }}
+	{% endif %}
+</h6>
+
+<h5 class="text-center">
+	{{ frappe.format(filters.from_date, {'fieldtype':'Date'}) }}
+	{{ ("to") }}
+	{{ frappe.format(filters.to_date, {'fieldtype':'Date'})}}
+</h5>
+
+<hr>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th style="width: 12%">{{ ("Date") }}</th>
+			<th style="width: 15%">{{ ("Reference") }}</th>
+			<th style="width: 25%">{{ ("Remarks") }}</th>
+			<th style="width: 15%">{{ ("Debit") }}</th>
+			<th style="width: 15%">{{ ("Credit") }}</th>
+			<th style="width: 18%">{{ ("Balance (Dr - Cr)") }}</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for row in data %}
+			<tr>
+			{% if row.posting_date %}
+				<td>{{ frappe.format(row.posting_date, {'fieldtype':'Date'}) }}</td>
+				<td>{{ row.voucher_type }}<br>{{ row.voucher_no }}</td>
+				
+				{# Assuming you want to wrap if remarks has long words. Jinja can't run JS `reduce()` so skip that logic or do it in Python before rendering. #}
+				<td>
+					<span>
+					{% if not (filters.party or filters.account) %}
+						{{ row.party or row.account }}<br>
+					{% endif %}
+
+					{% if row.remarks %}
+						<br>{{ ("Remarks") }}: {{ row.remarks }}
+					{% elif row.bill_no %}
+						<br>{{ ("Supplier Invoice No") }}: {{ row.bill_no }}
+					{% endif %}
+					</span>
+				</td>
+
+				<td style="text-align: right">
+					{{ frappe.format(row.debit, {'fieldtype': 'Currency'}) }}
+				</td>
+				<td style="text-align: right">
+					{{ frappe.format(row.credit, {'fieldtype': 'Currency'}) }}
+				</td>
+			{% else %}
+				<td></td>
+				<td></td>
+				<td><b>{{ frappe.format(row.account, {"fieldtype": "Link"}) or "&nbsp;" }}</b></td>
+				<td style="text-align: right">
+					{% if row.account %}
+						{{  frappe.format(row.debit, {'fieldtype': 'Currency'})  }}
+					{% endif %}
+				</td>
+				<td style="text-align: right">
+					{% if row.account %}
+						{{  frappe.format(row.credit, {'fieldtype': 'Currency'}) }}
+					{% endif %}
+				</td>
+			{% endif %}
+				<td style="text-align: right">
+					{{ frappe.format(row.balance, {'fieldtype': 'Currency'}) }}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<p class="text-right text-muted">
+	{{ ("Printed on {0}", frappe.format(frappe.utils.today(), {'fieldtype':'Date'})) }}
+</p>
