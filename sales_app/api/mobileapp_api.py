@@ -18,7 +18,7 @@ def search_item_details():
 
         customer = frappe.db.get_value("Customer", [["Portal User","user","=",user]], "name")
         if not customer:
-            frappe.throw("No Customer linked to this user.")
+            frappe.throw(f"No Customer linked to this user.user - {user}")
 
         filters = [["disabled", "=", 0]]
         if perm_item_code:
