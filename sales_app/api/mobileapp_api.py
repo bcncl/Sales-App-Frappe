@@ -162,7 +162,7 @@ def search_item_details():
 @frappe.whitelist()
 def general_ledger_report_pdf(from_date, to_date):
     try:
-		user = frappe.session.user
+        user = frappe.session.user
         customer = frappe.get_all("Customer", filters=[["Portal User","user","=",user]], fields=["*"])
         company = frappe.get_all("Company", filters={}, fields=["*"])
         filters = frappe._dict({
@@ -235,7 +235,7 @@ def general_ledger_report_pdf(from_date, to_date):
 @frappe.whitelist()
 def accounts_receivable_report_download():
     try:
-		user = frappe.session.user
+        user = frappe.session.user
         customer = frappe.get_all("Customer", filters=[["Portal User","user","=",user]], fields=["*"])
         company = frappe.get_all("Company", filters={}, fields=["*"])
         filters = frappe._dict({
