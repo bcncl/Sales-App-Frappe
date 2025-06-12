@@ -302,6 +302,40 @@ def render_pdf2(customer, report_date):
     except Exception as e:
         frappe.throw(f"Failed to generate PDF: {e}")
 
+@frappe.whitelist()
+def create_sales_order():
+    try:
+        if isinstance(payload, str):
+            import json
+            payload = json.loads(frappe.form_dict)
 
+        so = frappe.new_doc("Sales Order")
+        so.customer = payload.get("customer")
+        so.delivery_date = payload.get("delivery_date")
+        so.selling_price_list = payload.get("selling_price_list")
+        so.items = []
+
+        for item in payload.get("items", []):
+            so.append("items", {
+                "item_code": item.get("item_code"),
+                "item_name": item.get("item_name"),
+                "qty": item.get("qty"),
+                "rate": item.get("rate"),
+                "conversion_factor": item.get("conversion_factor", 1)
+            })
+
+        so.insert()
+        return {
+            "status": "success",
+            "message": "Sales Order created",
+            "sales_order_name": so.name
+        }
+
+    except Exception as e:
+        frappe.log_error(frappe.get_traceback(), "Create Sales Order Error")
+        return {
+            "status": "error",
+            "message": str(e)
+        }
 
 
