@@ -163,8 +163,8 @@ def search_item_details():
 def general_ledger_report_pdf(from_date, to_date):
     try:
 		user = frappe.session.user
-		customer = frappe.get_all("Customer", filters=[["Portal User","user","=",user]], fields=["*"])
-		company = frappe.get_all("Company", filters={}, fields=["*"])
+        customer = frappe.get_all("Customer", filters=[["Portal User","user","=",user]], fields=["*"])
+        company = frappe.get_all("Company", filters={}, fields=["*"])
         filters = frappe._dict({
             "company": company[0].name,
             "from_date": from_date,
@@ -236,8 +236,8 @@ def general_ledger_report_pdf(from_date, to_date):
 def accounts_receivable_report_download():
     try:
 		user = frappe.session.user
-		customer = frappe.get_all("Customer", filters=[["Portal User","user","=",user]], fields=["*"])
-		company = frappe.get_all("Company", filters={}, fields=["*"])
+        customer = frappe.get_all("Customer", filters=[["Portal User","user","=",user]], fields=["*"])
+        company = frappe.get_all("Company", filters={}, fields=["*"])
         filters = frappe._dict({
             "company": "company[0].name",
             "report_date": frappe.utils.today(),
