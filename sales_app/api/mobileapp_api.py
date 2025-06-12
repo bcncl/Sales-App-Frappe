@@ -305,10 +305,7 @@ def render_pdf2(customer, report_date):
 @frappe.whitelist()
 def create_sales_order():
     try:
-        if isinstance(payload, str):
-            import json
-            payload = json.loads(frappe.form_dict)
-
+        payload = frappe.form_dict
         so = frappe.new_doc("Sales Order")
         so.customer = payload.get("customer")
         so.delivery_date = payload.get("delivery_date")
@@ -324,7 +321,7 @@ def create_sales_order():
                 "conversion_factor": item.get("conversion_factor", 1)
             })
 
-        so.insert()
+        so.insert(ignore_permissions=True,ignore_mandatory=True)
         return {
             "status": "success",
             "message": "Sales Order created",
@@ -332,7 +329,7 @@ def create_sales_order():
         }
 
     except Exception as e:
-        frappe.log_error(frappe.get_traceback(), "Create Sales Order Error")
+        frappe.log_error("Create Sales Order Error", str(e))
         return {
             "status": "error",
             "message": str(e)
