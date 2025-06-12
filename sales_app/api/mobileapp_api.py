@@ -160,16 +160,19 @@ def search_item_details():
 
 
 @frappe.whitelist()
-def render_pdf(customer, from_date, to_date):
+def general_ledger_report_pdf(from_date, to_date):
     try:
+		user = frappe.session.user
+		customer = frappe.get_all("Customer", filters=[["Portal User","user","=",user]], fields=["*"])
+		company = frappe.get_all("Company", filters={}, fields=["*"])
         filters = frappe._dict({
-            "company": "Eactive (Demo)",
+            "company": company[0].name,
             "from_date": from_date,
             "to_date": to_date,
             "account": [],
             "party_type": "Customer",
-            "party": [customer],
-            "party_name": frappe.db.get_value("Customer", customer, "customer_name"),
+            "party": [customer[0].name],
+            "party_name": customer[0].customer_name,
             "group_by": "Categorize by Voucher (Consolidated)",
             "cost_center": [],
             "branch": [],
@@ -230,13 +233,16 @@ def render_pdf(customer, from_date, to_date):
 
 
 @frappe.whitelist()
-def render_pdf2(customer, report_date):
+def accounts_receivable_report_download():
     try:
+		user = frappe.session.user
+		customer = frappe.get_all("Customer", filters=[["Portal User","user","=",user]], fields=["*"])
+		company = frappe.get_all("Company", filters={}, fields=["*"])
         filters = frappe._dict({
-            "company": "Eactive (Demo)",
-            "report_date": report_date,
+            "company": "company[0].name",
+            "report_date": frappe.utils.today(),
             "party_type": "Customer",
-            "party": [customer],
+            "party": [customer[0].name],
             "ageing_based_on": "Due Date",
             "calculate_ageing_with": "Report Date",
             "range": "30, 60, 90, 120",
