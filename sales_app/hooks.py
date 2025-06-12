@@ -3,6 +3,7 @@ app_title = "Eactive Sales App"
 app_publisher = "Eactive Techonologies"
 app_description = "App For Custom mobile App"
 app_email = "kamesh@eactive.in"
+required_apps = ["frappe/erpnext"]
 app_license = "mit"
 
 # Apps
