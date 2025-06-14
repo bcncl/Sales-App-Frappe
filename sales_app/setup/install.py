@@ -12,7 +12,10 @@ def after_install():
         {'parent': 'Company', 'role': 'Customer', 'if_owner': 0, 'permlevel': 0, 'select': 1, 'read': 1, 'write': 0, 'create': 0, 'delete': 0, 'submit': 0, 'cancel': 0, 'report': 0, 'print': 0},
         {'parent': 'GL Entry', 'role': 'Customer', 'if_owner': 0, 'permlevel': 0, 'select': 1, 'read': 1, 'write': 0, 'create': 0, 'delete': 0, 'submit': 0, 'cancel': 0, 'report': 1, 'print': 0},
         {'parent': 'Account', 'role': 'Customer', 'if_owner': 0, 'permlevel': 0, 'select': 0, 'read': 1, 'write': 0, 'create': 0, 'delete': 0, 'submit': 0, 'cancel': 0, 'report': 0, 'print': 0},
-        {'parent': 'Sales Invoice', 'role': 'Customer', 'if_owner': 0, 'permlevel': 0, 'select': 1, 'read': 1, 'write': 0, 'create': 0, 'delete': 0, 'submit': 0, 'cancel': 0, 'report': 1, 'print': 1}
+        {'parent': 'Sales Invoice', 'role': 'Customer', 'if_owner': 0, 'permlevel': 0, 'select': 1, 'read': 1, 'write': 0, 'create': 0, 'delete': 0, 'submit': 0, 'cancel': 0, 'report': 1, 'print': 1},
+        {'parent': 'Sales Invoice', 'role': 'Customer', 'if_owner': 0, 'permlevel': 0, 'select': 1, 'read': 1, 'write': 0, 'create': 0, 'delete': 0, 'submit': 0, 'cancel': 0, 'report': 1, 'print': 1},
+        {'parent': 'Payment Ledger Entry', 'role': 'Customer', 'if_owner': 0, 'permlevel': 0, 'select': 0, 'read': 1, 'write': 0, 'create': 0, 'delete': 0, 'submit': 0, 'cancel': 0, 'report': 0, 'print': 0},
+        {'parent': 'Journal Entry', 'role': 'Customer', 'if_owner': 0, 'permlevel': 0, 'select': 0, 'read': 1, 'write': 0, 'create': 0, 'delete': 0, 'submit': 0, 'cancel': 0, 'report': 0, 'print': 0}
         ]
         
         for perm in permissions:
