@@ -166,7 +166,7 @@ def general_ledger_report_pdf(from_date, to_date):
         user = frappe.session.user
         customer = frappe.get_all("Customer", filters=[["Portal User","user","=",user]], fields=["*"])
         company = frappe.get_all("Company", filters={}, fields=["*"])
-		default_company = frappe.db.get_default("company")
+        default_company = frappe.db.get_default("company")
         filters = frappe._dict({
             "company": default_company if default_company else company[0].name,
             "from_date": from_date,
@@ -239,7 +239,7 @@ def accounts_receivable_report_download():
     try:
         user = frappe.session.user
         customer = frappe.get_all("Customer", filters=[["Portal User","user","=",user]], fields=["*"])
-		default_company = frappe.db.get_default("company")
+        default_company = frappe.db.get_default("company")
         company = frappe.get_all("Company", filters={}, fields=["*"])
         filters = frappe._dict({
             "company": default_company if default_company else company[0].name,
