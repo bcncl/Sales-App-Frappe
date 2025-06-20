@@ -3,6 +3,7 @@ from frappe.www.printview import get_print_style, get_visible_columns
 from frappe.utils.pdf import get_pdf
 from frappe.utils.file_manager import save_file
 import frappe.desk.query_report
+from erpnext.accounts.utils import get_exchange_rate 
 
 # from frappe.utils.print_format import get_print_style
 
@@ -106,58 +107,6 @@ def search_item_details():
             'status':False,
             'data':f"{e}"
         }
-
-# @frappe.whitelist()
-# def render_pdf(customer,from_date,to_date):
-#     try:
-#         #get_general_ledger_pdf(customer, from_date, to_date):
-#         filters = frappe._dict(
-#             {
-#                 "company": "Eactive (Demo)",
-#                 "from_date": from_date,
-#                 "to_date": to_date,
-#                 "account":[],
-#                 "party_type": "Customer",
-#                 "party": [customer],
-#                 "party_name": frappe.db.get_value("Customer", customer, "customer_name"),
-#                 "group_by": "Group by Voucher (Consolidated)",
-#                 "cost_center":[],
-#                 "branch":[],
-#                 "project":[],
-#                 "include_dimensions":1,
-#                 "geo_show_taxes": 0,
-#                 "geo_show_inventory": 0,
-#                 "geo_show_remarks": 1,
-#                 "presentation_currency": ""
-#             }
-#         )
-#         report_data = frappe.desk.query_report.run(
-#             "General Ledger",
-#             filters=filters,
-#             ignore_prepared_report= True
-#         )
-#         report_data["result"].pop()
-#         only_html = frappe.desk.query_report.get_script("General Ledger")
-#         html = frappe.render_template(only_html,
-#             {
-#                 "filters": filters,
-#                 "data": report_data["result"],
-#                 "title": "Statement of Accounts",
-#                 "columns": report_data["columns"],
-#                 "terms_and_conditions": False,
-#                 "ageing": False,
-#             }
-#         )
-#         html = frappe.render_template('frappe/www/printview.html',
-#             { "body": html, "css": get_print_style(), "title": "Statement of Accounts"}
-#         )
-
-#         pdf_data = get_pdf(html)
-#         frappe.local.response.filename =  "general_ledger.pdf"
-# 		frappe.local.response.filecontent = pdf_data
-# 		frappe.local.response.type = "download"
-#     except Exception as e:
-#         frappe.throw(str(e))
 
 
 @frappe.whitelist()
@@ -315,10 +264,20 @@ def accounts_receivable_report_download():
 def create_sales_order():
     try:
         payload = frappe.form_dict
+        company = frappe.get_all("Company", filters={}, fields=["*"])
+        company_currency = company[0].default_currency
+		posting_date = frappe.utils.nowdate()
+		
+        cust = frappe.get_doc("Customer", payload.get("Customer")
         so = frappe.new_doc("Sales Order")
         so.customer = payload.get("customer")
         so.delivery_date = payload.get("delivery_date")
-        so.selling_price_list = payload.get("selling_price_list")
+        # so.selling_price_list = payload.get("selling_price_list")
+        so.selling_price_list = cust.default_price_list or frappe.db.get_single_value("Selling Settings", "selling_price_list")
+		so.currency = cust.get("default_currency")
+        plc_rate = get_exchange_rate(
+            so.selling_price_list, company_currency, posting_date
+        ) or 1
         so.items = []
 
         for item in payload.get("items", []):
