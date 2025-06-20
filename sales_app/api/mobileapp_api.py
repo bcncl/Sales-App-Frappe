@@ -274,7 +274,7 @@ def create_sales_order():
         so.delivery_date = payload.get("delivery_date")
         # so.selling_price_list = payload.get("selling_price_list")
         so.selling_price_list = cust.default_price_list or frappe.db.get_single_value("Selling Settings", "selling_price_list")
-		so.currency = cust.get("default_currency")
+        so.currency = cust.get("default_currency")
         plc_rate = get_exchange_rate(
             so.selling_price_list, company_currency, posting_date
         ) or 1
