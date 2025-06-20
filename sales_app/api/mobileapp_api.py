@@ -266,9 +266,9 @@ def create_sales_order():
         payload = frappe.form_dict
         company = frappe.get_all("Company", filters={}, fields=["*"])
         company_currency = company[0].default_currency
-		posting_date = frappe.utils.nowdate()
+        posting_date = frappe.utils.nowdate()
 		
-        cust = frappe.get_doc("Customer", payload.get("Customer")
+        cust = frappe.get_doc("Customer", payload.get("Customer"))
         so = frappe.new_doc("Sales Order")
         so.customer = payload.get("customer")
         so.delivery_date = payload.get("delivery_date")
