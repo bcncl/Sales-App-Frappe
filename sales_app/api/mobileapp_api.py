@@ -3,7 +3,7 @@ from frappe.www.printview import get_print_style, get_visible_columns
 from frappe.utils.pdf import get_pdf
 from frappe.utils.file_manager import save_file
 import frappe.desk.query_report
-from erpnext.accounts.utils import get_exchange_rate 
+# from erpnext.accounts.utils import get_exchange_rate 
 
 # from frappe.utils.print_format import get_print_style
 
@@ -275,9 +275,9 @@ def create_sales_order():
         # so.selling_price_list = payload.get("selling_price_list")
         so.selling_price_list = cust.default_price_list or frappe.db.get_single_value("Selling Settings", "selling_price_list")
         so.currency = cust.get("default_currency")
-        plc_rate = get_exchange_rate(
-            so.selling_price_list, company_currency, posting_date
-        ) or 1
+        # plc_rate = get_exchange_rate(
+        #     so.selling_price_list, company_currency, posting_date
+        # ) or 1
         so.items = []
 
         for item in payload.get("items", []):
