@@ -82,29 +82,28 @@ def search_item_details():
                 },
                 fields=["file_url"]
             )
-			uoms = frappe.get_all(
-			    "UOM Conversion Detail",
-			    filters={"parent": item_code},
-			    fields=["uom", "conversion_factor"]
-			)
-			
-			# Include stock_uom by default
-			uoms.insert(0, {"uom": item["stock_uom"], "conversion_factor": 1.0})
-			
-			# Get price for each UOM
-			uom_prices = []
-			for uom_entry in uoms:
-			    uom_name = uom_entry["uom"]
-			    item_price = frappe.db.get_value("Item Price", {
-			        "item_code": item_code,
-			        "price_list": price_list,
-			        "uom": uom_name
-			    }, "price_list_rate")
-			    uom_prices.append({
-			        "uom": uom_name,
-			        "conversion_factor": uom_entry["conversion_factor"],
-			        "price": item_price if item_price else 0.0
-			    })
+            uoms = frappe.get_all(
+                "UOM Conversion Detail",
+                filters={"parent": item_code},
+                fields=["uom", "conversion_factor"]
+            )
+            # Include stock_uom by default
+            uoms.insert(0, {"uom": item["stock_uom"], "conversion_factor": 1.0})
+            
+            # Get price for each UOM
+            uom_prices = []
+            for uom_entry in uoms:
+                uom_name = uom_entry["uom"]
+                item_price = frappe.db.get_value("Item Price", {
+                    "item_code": item_code,
+                    "price_list": price_list,
+                    "uom": uom_name
+                }, "price_list_rate")
+                uom_prices.append({
+                    "uom": uom_name,
+                    "conversion_factor": uom_entry["conversion_factor"],
+                    "price": item_price if item_price else 0.0
+                })
 
             results.append({
                 "item_code": item_code,
@@ -114,7 +113,7 @@ def search_item_details():
                 "uom": item["stock_uom"],
                 "image": item["image"],
                 "price": price if price else 0.0,
-				"uom_prices": uom_prices,
+                "uom_prices": uom_prices,
                 "videos": [v["file_url"] for v in videos],
                 "images": [img["file_url"] for img in all_images],
             })
