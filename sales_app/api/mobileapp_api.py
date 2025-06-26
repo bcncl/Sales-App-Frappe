@@ -307,6 +307,7 @@ def create_sales_order():
             so.append("items", {
                 "item_code": item.get("item_code"),
                 "item_name": item.get("item_name"),
+                "uom": item.get("uom"),
                 "qty": item.get("qty"),
                 "rate": item.get("rate"),
                 "conversion_factor": item.get("conversion_factor", 1)
